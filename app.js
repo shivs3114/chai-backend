@@ -14,7 +14,7 @@ const app = express();
 (async () => {
   try {
     console.log('Connecting to the database...');
-    await mongoose.connect(`${MONGODB_URI}/${DB_NAME}`, {
+    await mongoose.connect(`${MONGODB_URI}`, {
     
     });
     console.log('Database connection successful.');
