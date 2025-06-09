@@ -24,13 +24,18 @@ app.use(express.static('public')); // Serve static files from the 'public' direc
 
   app.on('error', (err) => {console.error("App Error:", err);throw err;});
 
-
+// Export the app instance for use in other modules
   
 
 })
 .catch((err)=>{console.log("Error connecting to MongoDB:", err.message);});
 const app = express();
 
+
+//routes import 
+import userRouter from './src/routes/user.router.js';
+//routes declaration
+app.use('/api/v1/users',userRouter)
 
 export default app;
 

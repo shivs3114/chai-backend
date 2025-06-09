@@ -18,7 +18,7 @@ cloudinary.config({
     } catch (error) {
         fs.unlinkSync(localfilePath); // Delete the file if upload fails
         console.error('Error uploading to Cloudinary:', error);
-        throw null;
+        return null;
     }}
 
     export {uploadOnCloudinary}
