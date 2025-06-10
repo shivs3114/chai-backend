@@ -19,6 +19,13 @@ const UserSchema = new Schema({
     lowercase: true,
     trim: true,
   },
+  coverimage: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
   fullName: {
     type: String,
     required: true,

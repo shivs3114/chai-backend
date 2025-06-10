@@ -1,45 +1,46 @@
 import dotenv from 'dotenv';
 dotenv.config();
+
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import express from 'express';
-import connectDB from './src/db/db.js'; // Import the connectDB function
-
-
-connectDB()
-.then(()=>{
-  
-  app.listen(process.env.PORT || 8000, () => {
-    console.log(`Server is running on port http://localhost:${process.env.PORT}`);
-  });
-  app.use(cors({
-    origin:process.env.CORS_ORIGIN,
-    credentials: true,
-  }));  //cross origin resource sharing
-app.use(cookieParser());
-app.use(express.json({limit:"16kb"}));
-app.use(express.urlencoded({extended:true,limit:"16kb"}));  //for data from url,extended:to pass object in object form
-app.use(express.static('public')); // Serve static files from the 'public' directory
-
-  app.on('error', (err) => {console.error("App Error:", err);throw err;});
-
-// Export the app instance for use in other modules
-  
-
-})
-.catch((err)=>{console.log("Error connecting to MongoDB:", err.message);});
-const app = express();
-
-
-//routes import 
+import connectDB from './src/db/db.js';
 import userRouter from './src/routes/user.router.js';
-//routes declaration
-app.use('/api/v1/users',userRouter)
+
+const app = express(); // ✅ Moved to top
+
+// ✅ Middleware should be set up before app.listen()
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true,
+}));
+
+app.use(cookieParser());
+app.use(express.json()); // ✅ Required for parsing JSON
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.static('public'));
+
+// ✅ Declare routes before listen
+app.use('/api/v1/users', userRouter);
+
+// ✅ Connect DB and then listen
+connectDB()
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`Server is running at http://localhost:${process.env.PORT || 8000}`);
+    });
+
+    app.on('error', (err) => {
+      console.error("App Error:", err);
+      throw err;
+    });
+  })
+  .catch((err) => {
+    console.log("Error connecting to MongoDB:", err.message);
+  });
 
 export default app;
-
-
 
 
 
